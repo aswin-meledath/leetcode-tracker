@@ -116,7 +116,10 @@ def seed_data():
     for day, lc_id, title, topic, diff in problems:
         db.session.add(Problem(day=day, planned_day=day, leetcode_id=lc_id, title=title, topic=topic, difficulty=diff))
 
-    db.session.commit()
+# ------------------ DATABASE INITIALIZATION ------------------
+with app.app_context():
+    db.create_all()
+    seed_data()
 
 # ------------------ ROUTES ------------------
 @app.route('/')
@@ -230,8 +233,5 @@ def calculate_streak():
     return streak
 
 # ------------------ MAIN ------------------
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-        seed_data()
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run()
