@@ -3,9 +3,15 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 import csv
 import io
+import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///leetcode_tracker.db'
+
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+DB_PATH = os.path.join(BASE_DIR, "leetcode_tracker.db")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{DB_PATH}"
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'your_secret_key_here'  # For flash messages
 
@@ -116,10 +122,7 @@ def seed_data():
     for day, lc_id, title, topic, diff in problems:
         db.session.add(Problem(day=day, planned_day=day, leetcode_id=lc_id, title=title, topic=topic, difficulty=diff))
 
-# ------------------ DATABASE INITIALIZATION ------------------
-with app.app_context():
-    db.create_all()
-    seed_data()
+
 
 # ------------------ ROUTES ------------------
 @app.route('/')
@@ -233,5 +236,10 @@ def calculate_streak():
     return streak
 
 # ------------------ MAIN ------------------
+# ------------------ MAIN ------------------
 if __name__ == "__main__":
-    app.run()
+    with app.app_context():
+        db.create_all()
+        seed_data()
+    app.run(debug=True)
+
