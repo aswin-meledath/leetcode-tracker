@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeetCode Problems</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        nav {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filters form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .filter-group label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .filter-group input,
+        .filter-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.95em;
+        }
+        
+        .filter-group button {
+            padding: 8px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        
+        .filter-group button:hover {
+            background: #764ba2;
+        }
+        
+        .problems-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #667eea;
+            color: white;
+        }
+        
+        th {
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+            border-right: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        th:last-child {
+            border-right: none;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f8f9ff;
+        }
+        
+        .difficulty-easy {
+            color: #4caf50;
+            font-weight: 600;
+        }
+        
+        .difficulty-medium {
+            color: #ff9800;
+            font-weight: 600;
+        }
+        
+        .difficulty-hard {
+            color: #f44336;
+            font-weight: 600;
+        }
+        
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .checkbox:checked + .checkbox-label {
+            text-decoration: line-through;
+            color: #999;
+        }
+        
+        .checkbox-label {
+            display: inline-block;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .status-completed {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status-pending {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        
+        .topic-badge {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .toggle-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        
+        .toggle-btn:hover {
+            background: #764ba2;
+        }
+        
+        .toggle-btn.completed {
+            background: #4caf50;
+        }
+        
+        .no-problems {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 LeetCode Problems</h1>
+        </header>
+        
+        <nav>
+            <a href="/">Dashboard</a>
+            <a href="/problems">Problems</a>
+            <a href="/calendar">Calendar</a>
+            <a href="/daily-plans">Daily Plans</a>
+        </nav>
+        
+        <div class="filters">
+            <form method="GET" action="/problems">
+                <div class="filter-group">
+                    <label for="search">Search:</label>
+                    <input type="text" id="search" name="search" placeholder="Problem title..." value="{{ request.args.get('search', '') }}">
+                </div>
+                
+                <div class="filter-group">
+                    <label for="topic">Topic:</label>
+                    <select id="topic" name="topic">
+                        <option value="">All Topics</option>
+                        {% for topic in topics %}
+                        <option value="{{ topic }}" {% if request.args.get('topic') == topic %}selected{% endif %}>{{ topic }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="status">Status:</label>
+                    <select id="status" name="status">
+                        <option value="">All Status</option>
+                        <option value="completed" {% if request.args.get('status') == 'completed' %}selected{% endif %}>Completed</option>
+                        <option value="pending" {% if request.args.get('status') == 'pending' %}selected{% endif %}>Pending</option>
+                    </select>
+                </div>
+                
+                <button type="submit">Filter</button>
+            </form>
+        </div>
+        
+        {% if problems %}
+        <div class="problems-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 8%;">Status</th>
+                        <th style="width: 8%;">Day</th>
+                        <th style="width: 35%;">Title</th>
+                        <th style="width: 15%;">Topic</th>
+                        <th style="width: 12%;">Difficulty</th>
+                        <th style="width: 12%;">ID</th>
+                        <th style="width: 10%;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for problem in problems %}
+                    <tr>
+                        <td>
+                            <span class="status-badge {% if problem.completed %}status-completed{% else %}status-pending{% endif %}">
+                                {% if problem.completed %}✓ Done{% else %}⏳ Pending{% endif %}
+                            </span>
+                        </td>
+                        <td><strong>Day {{ problem.planned_day or problem.day }}</strong></td>
+                        <td>{{ problem.title }}</td>
+                        <td><span class="topic-badge">{{ problem.topic }}</span></td>
+                        <td>
+                            <span class="difficulty-{{ problem.difficulty.lower() }}">
+                                {{ problem.difficulty }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="https://leetcode.com/problems/{{ problem.title|lower|replace(' ', '-')|replace(',', '') }}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">
+                                #{{ problem.leetcode_id }}
+                            </a>
+                        </td>
+                        <td>
+                            <button class="toggle-btn {% if problem.completed %}completed{% endif %}" 
+                                    onclick="toggleProblem({{ problem.id }}, this)">
+                                {% if problem.completed %}Undo{% else %}Mark Done{% endif %}
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="no-problems">
+            <p>No problems found.</p>
+        </div>
+        {% endif %}
+        
+        <footer>
+            <p>Keep solving! 🚀</p>
+        </footer>
+    </div>
+    
+    <script>
+        function toggleProblem(problemId, button) {
+            fetch(`/toggle/${problemId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    button.classList.toggle('completed');
+                    button.textContent = data.completed ? 'Undo' : 'Mark Done';
+                    location.reload();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30-Day Calendar - LeetCode Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        nav {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .calendar-wrapper {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .day-card {
+            aspect-ratio: 1;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #e0e7ff 0%, #fce7f3 100%);
+            border: 2px solid transparent;
+        }
+        
+        .day-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+        
+        .day-card.completed {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+        }
+        
+        .day-card.partial {
+            background: linear-gradient(135deg, #ff9800 0%, #e65100 100%);
+            color: white;
+        }
+        
+        .day-card.pending {
+            background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+            color: white;
+            opacity: 0.6;
+        }
+        
+        .day-number {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .day-info {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .day-info-main {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            font-size: 1em;
+        }
+        
+        .day-info-main span {
+            font-weight: 600;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            border: 2px solid transparent;
+        }
+        
+        .legend-color.completed {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+        }
+        
+        .legend-color.partial {
+            background: linear-gradient(135deg, #ff9800 0%, #e65100 100%);
+        }
+        
+        .legend-color.pending {
+            background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+            opacity: 0.6;
+        }
+        
+        .legend-text {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .summary-item h3 {
+            font-size: 0.9em;
+            text-transform: uppercase;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        
+        .summary-item .value {
+            font-size: 2.2em;
+            font-weight: bold;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            .calendar-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+            
+            .day-number {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📅 30-Day Challenge Calendar</h1>
+        </header>
+        
+        <nav>
+            <a href="/">Dashboard</a>
+            <a href="/problems">Problems</a>
+            <a href="/calendar">Calendar</a>
+            <a href="/daily-plans">Daily Plans</a>
+        </nav>
+        
+        <div class="calendar-wrapper">
+            <div class="summary">
+                {% set total_completed = days|selectattr('completed', '>', 0)|list|length %}
+                {% set total_partially = days|selectattr('total', '>', 0)|list|length %}
+                <div class="summary-item">
+                    <h3>Days Fully Complete</h3>
+                    <div class="value">
+                        {{ days|selectattr('completed')|selectattr('total')|select('equalto', True)|list|length }}
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <h3>Days with Progress</h3>
+                    <div class="value">{{ total_completed }}</div>
+                </div>
+                <div class="summary-item">
+                    <h3>Days Remaining</h3>
+                    <div class="value">{{ 30 - total_completed }}</div>
+                </div>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color completed"></div>
+                    <span class="legend-text">All Completed</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color partial"></div>
+                    <span class="legend-text">Partially Done</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color pending"></div>
+                    <span class="legend-text">Not Started</span>
+                </div>
+            </div>
+            
+            <div class="calendar-grid">
+                {% for day in days %}
+                    {% if day.total == 0 %}
+                        <div class="day-card pending">
+                    {% elif day.completed == day.total %}
+                        <div class="day-card completed">
+                    {% elif day.completed > 0 %}
+                        <div class="day-card partial">
+                    {% else %}
+                        <div class="day-card pending">
+                    {% endif %}
+                        <div class="day-number">{{ day.day }}</div>
+                        <div class="day-info">
+                            {% if day.total > 0 %}
+                                <div class="day-info-main">
+                                    <span>{{ day.completed }}/{{ day.total }}</span>
+                                </div>
+                                <div style="font-size: 0.85em; margin-top: 5px;">
+                                    {{ "%.0f"|format((day.completed / day.total * 100) if day.total > 0 else 0) }}% done
+                                </div>
+                            {% else %}
+                                <span>No tasks</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <footer>
+            <p>Track your progress through the 30-day challenge! 🚀</p>
+        </footer>
+    </div>
+</body>
+</html>
