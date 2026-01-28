@@ -121,6 +121,7 @@ def seed_data():
 
     for day, lc_id, title, topic, diff in problems:
         db.session.add(Problem(day=day, planned_day=day, leetcode_id=lc_id, title=title, topic=topic, difficulty=diff))
+    db.session.commit()
 
 # ------------------ DATABASE INIT ------------------
 with app.app_context():
@@ -155,7 +156,9 @@ def problems():
         query = query.filter_by(completed=False)
     if search:
         query = query.filter(Problem.title.contains(search))
-    data = query.order_by(Problem.planned_day or Problem.day).all()
+    from sqlalchemy import func
+    data = query.order_by(func.coalesce(Problem.planned_day, Problem.day)).all()
+
     topics = db.session.query(Problem.topic).distinct().all()
     return render_template('problems.html', problems=data, topics=[t[0] for t in topics])
 @app.route('/update/<int:problem_id>', methods=['POST'])
